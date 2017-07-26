@@ -34,6 +34,8 @@ public class Calculator extends JPanel{
 		frame.setLocationRelativeTo(null);
 		//make the frame visible
 		frame.setVisible(true);
+		
+		//another line
 	}
 
 }
