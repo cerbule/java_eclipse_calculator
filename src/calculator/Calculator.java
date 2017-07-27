@@ -71,5 +71,6 @@ public class Calculator extends JPanel{
 		//make the frame visible
 		frame.setVisible(true);
 	}
-
+	
+	//add a comment for git
 }
