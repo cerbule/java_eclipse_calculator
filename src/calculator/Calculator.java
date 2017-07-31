@@ -3,9 +3,12 @@ package calculator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,7 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Calculator extends JPanel{
+public class Calculator extends JPanel implements ActionListener{ //ActionListener lets you liten when you press a button
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -33,6 +36,10 @@ public class Calculator extends JPanel{
 	
 	//add the text field
 	private JTextField field;
+	
+	//variables for opperatio buttons
+	private double num1, num2, ans;
+	private int op;
 	
 	//create a new multi-dimenstional array of ints
 	//[0] = gridx, [1]=gridy, [2] = gridwidth, [3] = gridheight
@@ -79,6 +86,8 @@ public class Calculator extends JPanel{
 		numberButtons = new JButton[10];
 		for(int i = 0; i < numberButtons.length; i++){
 			numberButtons[i] = new JButton("" + i);
+			//we are able to press number buttons and see them in the text field
+			numberButtons[i].addActionListener(this);
 			
 			//it's gonna take the values  to put the buttons
 			gbc.gridx = numConstraints[i][0];
@@ -112,6 +121,9 @@ public class Calculator extends JPanel{
 			gbc.gridwidth = opConstraints[i][2];
 			gbc.gridheight = opConstraints[i][3];
 			
+			//add actionListener to all opButtons
+			opButtons[i].addActionListener(this);
+			
 			add(opButtons[i], gbc);
 		}
 		
@@ -119,6 +131,8 @@ public class Calculator extends JPanel{
 		field = new JTextField();
 		field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		field.setEditable(false);
+		//set the text in text field
+		field.setFont(new Font("Arial", Font.PLAIN, 24));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 4;
@@ -151,6 +165,74 @@ public class Calculator extends JPanel{
 		frame.setLocationRelativeTo(null);
 		//make the frame visible
 		frame.setVisible(true);
+	}
+
+	
+	public void actionPerformed(ActionEvent e) {
+		for(int i = 0; i < numberButtons.length; i++){
+			if(e.getSource() == numberButtons[i]){
+				field.setText(field.getText() + i);
+			}
+		}
+		//add the decimal button
+		if(e.getSource() == opButtons[0] && !field.getText().contains(".")){
+			field.setText(field.getText() + ".");
+		}
+		
+		//+/- button
+		if(e.getSource() == opButtons[6]){
+			field.setText("" + (-1 * Integer.parseInt(field.getText())));
+		}
+		
+		//clear button
+		if(e.getSource() == opButtons[7]){
+			field.setText("");
+		}
+		
+		//all operations
+		if(e.getSource() == opButtons[2]){
+			num1 = Integer.parseInt(field.getText());
+			op = 1;
+			field.setText("");
+		}
+		
+		if(e.getSource() == opButtons[3]){
+			num1 = Integer.parseInt(field.getText());
+			op = 2;
+			field.setText("");
+		}
+		
+		if(e.getSource() == opButtons[4]){
+			num1 = Integer.parseInt(field.getText());
+			op = 3;
+			field.setText("");
+		}
+		
+		if(e.getSource() == opButtons[5]){
+			num1 = Integer.parseInt(field.getText());
+			op = 4;
+			field.setText("");
+		}
+		
+		if(e.getSource() == opButtons[1]){
+			num2 = Integer.parseInt(field.getText());
+			
+			if(op == 1) {
+				ans = num1 + num2;
+			}else if(op == 2){
+				ans = num1 - num2;
+			}else if(op == 3){
+				ans = num1 * num2;
+			}else if(op == 4){
+				ans = num1 / num2;
+			}
+			
+			op = 0;
+			field.setText("" + ans);
+			
+		}
+		
+		
 	}
 	
 	//add a comment for git
